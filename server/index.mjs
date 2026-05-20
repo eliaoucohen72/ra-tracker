@@ -1,7 +1,14 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath, URL } from 'url';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 const pikudHaoref = require('pikud-haoref-api');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,11 +24,12 @@ app.get('/api/alerts', (req, res) => {
     return res.json({ alerts: alertCache.alerts });
   }
 
-  pikudHaoref.getActiveAlerts((err, alerts) => {
+  pikudHaoref.getActiveAlert((err, alert) => {
     if (err) {
-      console.error('[ratracker-server] getActiveAlerts error:', err.message);
+      console.error('[ratracker-server] getActiveAlert error:', err.message);
       return res.json({ alerts: [], error: err.message });
     }
+    const alerts = alert ? [alert] : [];
     alertCache = { ts: Date.now(), alerts };
     res.json({ alerts });
   });

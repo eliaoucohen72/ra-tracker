@@ -10,9 +10,9 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
     "preview": "vite preview",
-    "server": "node server/index.js",
-    "server:dev": "node --watch server/index.js",
-    "dev:full": "concurrently \"npm run dev\" \"npm run server:dev\""
+    "server": "node server/index.mjs",
+    "server:dev": "node --watch server/index.mjs",
+    "start": "concurrently \"npm run dev\" \"npm run server\""
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
