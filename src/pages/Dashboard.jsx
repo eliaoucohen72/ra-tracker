@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import StatusBanner from "../components/dashboard/StatusBanner";
 import AlertCards from "../components/dashboard/AlertCards";
 import AlertHistory from "../components/dashboard/AlertHistory";
@@ -7,6 +8,8 @@ import AlertMap from "../components/dashboard/AlertMap";
 import CityStats from "../components/dashboard/CityStats";
 import { Shield } from "lucide-react";
 import ThemeToggle from "../components/dashboard/ThemeToggle";
+import LanguageToggle from "../components/dashboard/LanguageToggle";
+import { useLanguage } from "@/lib/LanguageContext";
 import { cityByName, cityCountdown } from "../data/cityUtils";
 
 const API_URL = "/api/alerts";
@@ -81,8 +84,8 @@ const DEMO_ALERTS = [
   },
 ];
 
-function getTimeString() {
-  return new Date().toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+function getTimeString(language) {
+  return new Date().toLocaleTimeString(language === "he" ? "he-IL" : "en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
 // Enrich raw city name strings with metadata from our cities database
@@ -99,6 +102,8 @@ function enrichCities(cityNames) {
 }
 
 export default function Dashboard() {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const [isDemo, setIsDemo] = useState(false);
   const [activeAlert, setActiveAlert] = useState(null);
   const [alertStartTime, setAlertStartTime] = useState(null);
@@ -143,7 +148,7 @@ export default function Dashboard() {
       alertStartTimeRef.current = now;
       setTotalAlerts((prev) => prev + 1);
       setTotalCities((prev) => prev + alertData.cities.length);
-      setLastUpdate(getTimeString());
+      setLastUpdate(getTimeString(language));
 
       setHistory((prev) => {
         const entry = {
@@ -151,13 +156,13 @@ export default function Dashboard() {
           title: alertData.instructions,
           type: alertData.type,
           cities: alertData.cities,
-          time: getTimeString(),
+          time: getTimeString(language),
           timestamp: Date.now(),
         };
         return [entry, ...prev].slice(0, 20);
       });
     }
-  }, []);
+  }, [language]);
 
   // Live polling from local Express server
   useEffect(() => {
@@ -180,14 +185,14 @@ export default function Dashboard() {
       } catch (err) {
         console.log("Fetch error:", err.message);
       }
-      setLastUpdate(getTimeString());
+      setLastUpdate(getTimeString(language));
     };
 
     liveFetchRef.current = fetchAlerts;
     fetchAlerts();
     const interval = setInterval(fetchAlerts, 5000);
     return () => clearInterval(interval);
-  }, [processAlert, isDemo]);
+  }, [processAlert, isDemo, language]);
 
   // Demo mode: cycle through fake alerts every 8s
   useEffect(() => {
@@ -197,13 +202,13 @@ export default function Dashboard() {
       const alert = DEMO_ALERTS[demoIndexRef.current % DEMO_ALERTS.length];
       demoIndexRef.current += 1;
       processAlert({ ...alert, id: alert.id + "-" + demoIndexRef.current });
-      setLastUpdate(getTimeString());
+      setLastUpdate(getTimeString(language));
     };
 
     runDemo();
     const interval = setInterval(runDemo, 8000);
     return () => clearInterval(interval);
-  }, [isDemo, processAlert]);
+  }, [isDemo, processAlert, language]);
 
   const handleRefresh = useCallback(() => {
     if (liveFetchRef.current) liveFetchRef.current();
@@ -235,13 +240,14 @@ export default function Dashboard() {
           </div>
           <div>
             <h1 className="font-inter font-bold text-foreground text-lg leading-tight">
-              Red Alert Tracker
+              {t("header.title")}
             </h1>
             <p className="text-xs text-muted-foreground">
-              Israel Missile Alert Dashboard — Live
+              {t("header.subtitle")}
             </p>
           </div>
           <div className="ml-auto flex items-center gap-3">
+            <LanguageToggle />
             <ThemeToggle />
             <button
               onClick={() => {
@@ -255,13 +261,13 @@ export default function Dashboard() {
                 demoIndexRef.current = 0;
               }}
               className="flex items-center gap-2"
-              title={isDemo ? "Switch to Live" : "Switch to Demo"}
+              title={isDemo ? t("modeToggle.switchToLive") : t("modeToggle.switchToDemo")}
             >
-              <span className={`text-xs font-inter transition-all duration-200 ${isDemo ? "font-bold text-foreground" : "font-medium text-muted-foreground"}`}>DEMO</span>
+              <span className={`text-xs font-inter transition-all duration-200 ${isDemo ? "font-bold text-foreground" : "font-medium text-muted-foreground"}`}>{t("modeToggle.demo")}</span>
               <div className={`relative w-11 h-6 rounded-full transition-colors duration-300 ${isDemo ? "bg-yellow-400 dark:bg-yellow-500" : "bg-emerald-400 dark:bg-emerald-500"}`}>
                 <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-300 ${isDemo ? "translate-x-0" : "translate-x-5"}`} />
               </div>
-              <span className={`text-xs font-inter transition-all duration-200 ${!isDemo ? "font-bold text-foreground" : "font-medium text-muted-foreground"}`}>LIVE</span>
+              <span className={`text-xs font-inter transition-all duration-200 ${!isDemo ? "font-bold text-foreground" : "font-medium text-muted-foreground"}`}>{t("modeToggle.live")}</span>
             </button>
           </div>
         </div>
@@ -300,7 +306,7 @@ export default function Dashboard() {
 
       <footer className="border-t border-border py-4 mt-8">
         <p className="text-center text-xs text-muted-foreground font-inter">
-          Data source: Pikud Ha'Oref — Home Front Command · For informational purposes only
+          {t("footer.dataSource")}
         </p>
       </footer>
     </div>

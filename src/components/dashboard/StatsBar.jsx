@@ -1,5 +1,6 @@
 import React from "react";
 import { Activity, Target, Clock, Radio } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 function StatItem({ icon: Icon, label, value, color }) {
   return (
@@ -16,17 +17,18 @@ function StatItem({ icon: Icon, label, value, color }) {
 }
 
 export default function StatsBar({ totalAlerts, totalCities, lastUpdate, isLive, onRefresh }) {
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
       <StatItem
         icon={Activity}
-        label="Total Alerts"
+        label={t("statsBar.totalAlerts")}
         value={totalAlerts}
         color="bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400"
       />
       <StatItem
         icon={Target}
-        label="Cities Targeted"
+        label={t("statsBar.citiesTargeted")}
         value={totalCities}
         color="bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400"
       />
@@ -35,12 +37,12 @@ export default function StatsBar({ totalAlerts, totalCities, lastUpdate, isLive,
           <Clock className="w-4 h-4" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-muted-foreground font-inter">Last Update</p>
+          <p className="text-xs text-muted-foreground font-inter">{t("statsBar.lastUpdate")}</p>
           <p className="text-lg font-inter font-bold tabular-nums text-foreground truncate">{lastUpdate || "—"}</p>
         </div>
         <button
           onClick={onRefresh}
-          title="Refresh now"
+          title={t("statsBar.refreshNow")}
           className="ml-1 shrink-0 text-lg text-muted-foreground hover:text-foreground bg-secondary hover:bg-border rounded-md px-2 py-1 transition-colors leading-none"
         >
           ↻
@@ -48,8 +50,8 @@ export default function StatsBar({ totalAlerts, totalCities, lastUpdate, isLive,
       </div>
       <StatItem
         icon={Radio}
-        label="Mode"
-        value={isLive ? "LIVE" : "DEMO"}
+        label={t("statsBar.mode")}
+        value={isLive ? t("modeToggle.live") : t("modeToggle.demo")}
         color={isLive ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400" : "bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400"}
       />
     </div>

@@ -3,7 +3,9 @@ import { MapContainer, TileLayer, Marker, Tooltip, useMap } from "react-leaflet"
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapPin } from "lucide-react";
-import { cityCoords as CITY_COORDS } from "../../data/cityUtils";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/lib/LanguageContext";
+import { cityCoords as CITY_COORDS, cityByName } from "../../data/cityUtils";
 
 const pinIcon = L.divIcon({
   className: "",
@@ -51,6 +53,10 @@ function extractCityName(label) {
 }
 
 export default function AlertMap({ history }) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const isHebrew = language === "he";
+  const displayCity = (name) => (isHebrew ? name : cityByName[name]?.name_en ?? name);
   const isDark = useDarkMode();
   const recentCityAlerts = useMemo(() => {
     const now = Date.now();
@@ -94,12 +100,12 @@ export default function AlertMap({ history }) {
       <div className="flex items-center gap-2 bg-card px-4 py-3 border-b border-border">
         <MapPin className="w-4 h-4 text-primary" />
         <h2 className="text-sm font-inter font-bold text-foreground">
-          Alert Map
+          {t("alertMap.title")}
         </h2>
-        <span className="text-xs text-muted-foreground ml-1">— last 10 minutes</span>
+        <span className="text-xs text-muted-foreground ml-1">— {t("alertMap.last10Minutes")}</span>
         {markerEntries.length > 0 && (
           <span className="ml-auto text-xs bg-red-100 border border-red-400/60 text-red-700 dark:bg-red-900/50 dark:border-red-700/40 dark:text-red-300 px-2 py-0.5 rounded-full font-inter">
-            {markerEntries.length} cities
+            {markerEntries.length} {t("alertMap.cities")}
           </span>
         )}
       </div>
@@ -133,14 +139,17 @@ export default function AlertMap({ history }) {
                 icon={pinIcon}
               >
                 <Tooltip direction="bottom" offset={[0, 8]} opacity={1}>
-                  <div dir="rtl" style={{ fontFamily: "'Heebo', sans-serif", minWidth: 130 }}>
-                    <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>{city}</div>
+                  <div
+                    dir={isHebrew ? "rtl" : "ltr"}
+                    style={{ fontFamily: isHebrew ? "'Heebo', sans-serif" : "'Inter', sans-serif", minWidth: 130 }}
+                  >
+                    <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>{displayCity(city)}</div>
                     {areaname && (
                       <div style={{ fontSize: 11, color: "#f97316", marginBottom: 4 }}>{areaname}</div>
                     )}
                     {migun_time && (
                       <div style={{ fontSize: 11, color: "#facc15", marginBottom: 4 }}>
-                        ⏱ {migun_time} שניות
+                        ⏱ {migun_time} {t("alertMap.seconds")}
                       </div>
                     )}
                     {times.map((t, i) => (

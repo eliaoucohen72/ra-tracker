@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Timer, MapPin } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function CityCard({ city, startTime, countdown = 45 }) {
+  const { t } = useTranslation();
   const [secondsLeft, setSecondsLeft] = useState(countdown);
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function CityCard({ city, startTime, countdown = 45 }) {
 
       {!isExpired && (
         <p className="text-xs mt-2 font-heebo text-muted-foreground">
-          {isUrgent ? "⚠️ זמן מועט! היכנסו למרחב המוגן מיד!" : "היכנסו למרחב המוגן"}
+          {isUrgent ? t("cityCard.urgentInstruction") : t("cityCard.instruction")}
         </p>
       )}
     </div>

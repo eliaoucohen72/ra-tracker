@@ -1,8 +1,16 @@
 import React, { useMemo } from "react";
 import { BarChart2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/lib/LanguageContext";
+import { cityByName } from "@/data/cityUtils";
 
 export default function CityStats({ history }) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const isHebrew = language === "he";
+  const displayCity = (name) => (isHebrew ? name : cityByName[name]?.name_en ?? name);
+
   const cityCounts = useMemo(() => {
     const counts = {};
     history.forEach((entry) => {
@@ -17,13 +25,12 @@ export default function CityStats({ history }) {
     <div className="rounded-xl border border-border bg-card p-6 flex flex-col">
       <div className="flex items-center gap-2 mb-4">
         <BarChart2 className="w-5 h-5 text-primary" />
-        <h2 className="text-lg font-inter font-bold text-foreground">ערים שהותקפו</h2>
-        <span className="text-xs text-muted-foreground ml-1">Cities targeted</span>
+        <h2 className="text-lg font-inter font-bold text-foreground">{t("cityStats.title")}</h2>
       </div>
 
       {cityCounts.length === 0 ? (
         <p className="text-muted-foreground text-sm font-inter text-center py-8">
-          No data yet.
+          {t("cityStats.empty")}
         </p>
       ) : (
         <ScrollArea className="h-72">
@@ -32,11 +39,11 @@ export default function CityStats({ history }) {
               <div
                 key={city}
                 className="flex items-center justify-between bg-secondary/50 border border-border rounded-lg px-3 py-2"
-                dir="rtl"
+                dir={isHebrew ? "rtl" : "ltr"}
               >
-                <span className="font-heebo font-semibold text-sm text-foreground">{city}</span>
+                <span className={`font-semibold text-sm text-foreground ${isHebrew ? "font-heebo" : "font-inter"}`}>{displayCity(city)}</span>
                 <span className="font-inter text-xs text-red-400 font-bold tabular-nums ml-2 shrink-0">
-                  {count} {count === 1 ? "alert" : "alerts"}
+                  {count} {count === 1 ? t("cityStats.alert") : t("cityStats.alerts")}
                 </span>
               </div>
             ))}

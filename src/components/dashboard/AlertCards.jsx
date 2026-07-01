@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 import { Timer, MapPin, Flame } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/lib/LanguageContext";
 import { getAlertType } from "../../data/alertTypes";
+import { cityByName } from "../../data/cityUtils";
 
 export default function AlertCards({ cities, startTime, alertType = "missiles" }) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const isHebrew = language === "he";
   const typeConfig = getAlertType(alertType);
 
   // The group countdown = minimum countdown among all cities (most urgent)
@@ -40,7 +46,7 @@ export default function AlertCards({ cities, startTime, alertType = "missiles" }
   // Group cities by zone, sort zones by their minimum countdown (most urgent first)
   const zoneGroups = cities.reduce((acc, city) => {
     const zone = city.zone || "אחר";
-    if (!acc[zone]) acc[zone] = { zone, zone_en: city.zone_en, cities: [] };
+    if (!acc[zone]) acc[zone] = { zone, zone_en: city.zone_en || "Other", cities: [] };
     acc[zone].cities.push(city);
     return acc;
   }, {});
@@ -76,14 +82,14 @@ export default function AlertCards({ cities, startTime, alertType = "missiles" }
         <div className="flex items-center gap-2">
           <Flame className={`w-5 h-5 ${isUrgent ? "text-red-400" : "text-orange-400"}`} />
           <span className="font-inter font-bold text-foreground">
-            <span className="font-heebo">{typeConfig.label}</span>
+            <span className={isHebrew ? "font-heebo" : "font-inter"}>{isHebrew ? typeConfig.label : typeConfig.label_en}</span>
             {typeConfig.isDrill && (
               <span className="ml-2 text-xs bg-gray-200 dark:bg-gray-700 text-muted-foreground px-1.5 py-0.5 rounded font-inter">
                 DRILL
               </span>
             )}
             <span className="text-muted-foreground font-normal mx-1.5">—</span>
-            <span className="font-heebo">{cities.length} יעדים</span>
+            <span className={isHebrew ? "font-heebo" : "font-inter"}>{cities.length} {t("alertCards.targets")}</span>
           </span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -103,7 +109,7 @@ export default function AlertCards({ cities, startTime, alertType = "missiles" }
           >
             {isExpired ? "00" : String(secondsLeft).padStart(2, "0")}
           </span>
-          <span className="text-xs text-muted-foreground font-inter">sec</span>
+          <span className="text-xs text-muted-foreground font-inter">{t("alertCards.sec")}</span>
         </div>
       </div>
 
@@ -112,15 +118,14 @@ export default function AlertCards({ cities, startTime, alertType = "missiles" }
         {sortedZones.map(({ zone, zone_en, cities: zoneCities }) => (
           <div key={zone}>
             <div className="flex items-center gap-1.5 mb-1.5">
-              <span className="text-xs font-heebo font-semibold text-muted-foreground">{zone}</span>
-              {zone_en && (
-                <span className="text-xs text-muted-foreground/60 font-inter">· {zone_en}</span>
-              )}
+              <span className={`text-xs font-semibold text-muted-foreground ${isHebrew ? "font-heebo" : "font-inter"}`}>
+                {isHebrew ? zone : zone_en}
+              </span>
               <span className="text-xs text-muted-foreground/50 font-inter ml-auto">
                 {zoneCities.length}
               </span>
             </div>
-            <div className="flex flex-wrap gap-2" dir="rtl">
+            <div className="flex flex-wrap gap-2" dir={isHebrew ? "rtl" : "ltr"}>
               {zoneCities.map((city) => {
                 const cityUrgent = (city.countdown ?? 45) <= 15;
                 return (
@@ -137,7 +142,9 @@ export default function AlertCards({ cities, startTime, alertType = "missiles" }
                     <MapPin
                       className={`w-3 h-3 ${cityUrgent || isUrgent ? "text-red-400" : "text-orange-400"}`}
                     />
-                    <span className="font-heebo font-bold text-foreground">{city.name}</span>
+                    <span className={`font-bold text-foreground ${isHebrew ? "font-heebo" : "font-inter"}`}>
+                      {isHebrew ? city.name : cityByName[city.name]?.name_en ?? city.name}
+                    </span>
                     <span className="text-xs opacity-50 font-inter ml-0.5">{city.countdown}s</span>
                   </div>
                 );
@@ -148,10 +155,10 @@ export default function AlertCards({ cities, startTime, alertType = "missiles" }
       </div>
 
       {!isExpired && (
-        <p className="text-xs mt-3 font-heebo text-muted-foreground" dir="rtl">
+        <p className={`text-xs mt-3 text-muted-foreground ${isHebrew ? "font-heebo" : "font-inter"}`} dir={isHebrew ? "rtl" : "ltr"}>
           {isUrgent
-            ? "⚠️ זמן מועט! היכנסו למרחב המוגן מיד!"
-            : "היכנסו למרחב המוגן"}
+            ? t("alertCards.urgentInstruction")
+            : t("alertCards.instruction")}
         </p>
       )}
     </div>

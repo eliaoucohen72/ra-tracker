@@ -1,0 +1,74 @@
+{
+  "header": {
+    "title": "Red Alert Tracker",
+    "subtitle": "Israel Missile Alert Dashboard — Live"
+  },
+  "modeToggle": {
+    "switchToLive": "Switch to Live",
+    "switchToDemo": "Switch to Demo",
+    "demo": "DEMO",
+    "live": "LIVE"
+  },
+  "themeToggle": {
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "languageToggle": {
+    "switchToHebrew": "Switch to Hebrew",
+    "switchToEnglish": "Switch to English"
+  },
+  "statusBanner": {
+    "allClear": "No active alerts — All clear",
+    "takeShelter": "Take shelter immediately!",
+    "drill": "DRILL"
+  },
+  "alertCards": {
+    "sec": "sec",
+    "targets": "targets",
+    "urgentInstruction": "⚠️ Time is short! Take shelter immediately!",
+    "instruction": "Take shelter"
+  },
+  "cityCard": {
+    "urgentInstruction": "⚠️ Time is short! Take shelter immediately!",
+    "instruction": "Take shelter"
+  },
+  "statsBar": {
+    "totalAlerts": "Total Alerts",
+    "citiesTargeted": "Cities Targeted",
+    "lastUpdate": "Last Update",
+    "mode": "Mode",
+    "refreshNow": "Refresh now"
+  },
+  "alertHistory": {
+    "title": "Alert History",
+    "empty": "No alerts recorded yet. Alerts will appear here when detected."
+  },
+  "cityStats": {
+    "title": "Cities Targeted",
+    "empty": "No data yet.",
+    "alert": "alert",
+    "alerts": "alerts"
+  },
+  "alertMap": {
+    "title": "Alert Map",
+    "last10Minutes": "last 10 minutes",
+    "cities": "cities",
+    "seconds": "sec"
+  },
+  "footer": {
+    "dataSource": "Data source: Pikud Ha'Oref — Home Front Command · For informational purposes only"
+  },
+  "userNotRegistered": {
+    "title": "Access Restricted",
+    "message": "You are not registered to use this application. Please contact the app administrator to request access.",
+    "helpIntro": "If you believe this is an error, you can:",
+    "help1": "Verify you are logged in with the correct account",
+    "help2": "Contact the app administrator for access",
+    "help3": "Try logging out and back in again"
+  },
+  "pageNotFound": {
+    "title": "Page Not Found",
+    "message": "The page \"{{pageName}}\" could not be found in this application.",
+    "goHome": "Go Home"
+  }
+}

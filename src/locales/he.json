@@ -1,0 +1,74 @@
+{
+  "header": {
+    "title": "מעקב התרעות אדום",
+    "subtitle": "לוח בקרה להתרעות פיקוד העורף — בזמן אמת"
+  },
+  "modeToggle": {
+    "switchToLive": "עבור למצב חי",
+    "switchToDemo": "עבור למצב הדגמה",
+    "demo": "הדגמה",
+    "live": "חי"
+  },
+  "themeToggle": {
+    "switchToLight": "עבור למצב בהיר",
+    "switchToDark": "עבור למצב כהה"
+  },
+  "languageToggle": {
+    "switchToHebrew": "עבור לעברית",
+    "switchToEnglish": "עבור לאנגלית"
+  },
+  "statusBanner": {
+    "allClear": "אין התרעות",
+    "takeShelter": "היכנסו למרחב המוגן!",
+    "drill": "תרגיל"
+  },
+  "alertCards": {
+    "sec": "שניות",
+    "targets": "יעדים",
+    "urgentInstruction": "⚠️ זמן מועט! היכנסו למרחב המוגן מיד!",
+    "instruction": "היכנסו למרחב המוגן"
+  },
+  "cityCard": {
+    "urgentInstruction": "⚠️ זמן מועט! היכנסו למרחב המוגן מיד!",
+    "instruction": "היכנסו למרחב המוגן"
+  },
+  "statsBar": {
+    "totalAlerts": "סך ההתרעות",
+    "citiesTargeted": "ערים שהותקפו",
+    "lastUpdate": "עדכון אחרון",
+    "mode": "מצב",
+    "refreshNow": "רענן עכשיו"
+  },
+  "alertHistory": {
+    "title": "היסטוריית התרעות",
+    "empty": "טרם נרשמו התרעות. התרעות יופיעו כאן כשיתגלו."
+  },
+  "cityStats": {
+    "title": "ערים שהותקפו",
+    "empty": "אין נתונים עדיין.",
+    "alert": "התרעה",
+    "alerts": "התרעות"
+  },
+  "alertMap": {
+    "title": "מפת התרעות",
+    "last10Minutes": "10 הדקות האחרונות",
+    "cities": "ערים",
+    "seconds": "שניות"
+  },
+  "footer": {
+    "dataSource": "מקור הנתונים: פיקוד העורף · למטרות מידע בלבד"
+  },
+  "userNotRegistered": {
+    "title": "הגישה חסומה",
+    "message": "אינך רשום לשימוש באפליקציה זו. אנא פנה למנהל המערכת לבקשת גישה.",
+    "helpIntro": "אם לדעתך מדובר בטעות, ניתן:",
+    "help1": "לוודא שהתחברת עם החשבון הנכון",
+    "help2": "לפנות למנהל המערכת לקבלת גישה",
+    "help3": "לנסות להתנתק ולהתחבר מחדש"
+  },
+  "pageNotFound": {
+    "title": "העמוד לא נמצא",
+    "message": "העמוד \"{{pageName}}\" לא נמצא באפליקציה זו.",
+    "goHome": "חזרה לדף הבית"
+  }
+}
